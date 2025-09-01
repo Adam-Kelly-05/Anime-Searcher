@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime API</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Anime API</h1>
+
+    <p>Enter MyAnimeListID</p>
+    <input type="text" id="animeInput">
+    <select id="showOrMovie">
+        <option value="TV">Show</option>
+        <option value="Movie">Movie</option>
+    </select>
+    <button onclick="displayAnime()">Search</button>
+
+    <div id="resultsContainer">
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

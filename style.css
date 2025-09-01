@@ -1,0 +1,25 @@
+#resultsContainer{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.animeCard {
+    border: 1px solid black;
+    border-radius: 5px;
+    width: 20%;
+    margin: 10px;
+    background-color: #c2c2c2;
+}
+
+img {
+    border: 5px solid black;
+    border-radius: 5px;
+    margin: auto;
+    display: block;
+    width: calc(100% - 5px - 5px);
+}
+
+.animeInformation {
+    margin: 5%;
+}
