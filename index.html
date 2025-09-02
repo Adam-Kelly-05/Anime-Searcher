@@ -9,7 +9,6 @@
 <body>
     <h1>Anime API</h1>
 
-    <p>Enter MyAnimeListID</p>
     <input type="text" id="animeInput">
     <select id="showOrMovie">
         <option value="TV">Show</option>
@@ -17,8 +16,8 @@
     </select>
     <button onclick="displayAnime()">Search</button>
 
-    <div id="resultsContainer">
-    </div>
+    <div class="container" id="animeContainer"></div>
+    <div class="container" id="characterContainer"></div>
 
     <script src="script.js"></script>
 </body>
