@@ -4,19 +4,23 @@ async function getAnimeByName(searchString, showOrMovie){
         const response = await fetch(url);
         const result = await response.json();
 
-        let lowestPopularity = result.data[0].popularity;
+        let lowestPopularity = 99**9;
         let correctAnimeID = null;
         for (let i = 0; i < 5; i++){
-            let currentAnime = result.data[i];
-            if (currentAnime.type == showOrMovie){
-                if (currentAnime.popularity <= lowestPopularity) {
-                    lowestPopularity = currentAnime.popularity;
-                    correctAnimeID = i;
+            if (result.data[i] != null){
+                let currentAnime = result.data[i];
+                if (currentAnime.type == showOrMovie){
+                    if (currentAnime.popularity <= lowestPopularity) {
+                        lowestPopularity = currentAnime.popularity;
+                        correctAnimeID = i;
+                    }
                 }
             }
-        };
+        }
+
         if (correctAnimeID != null)
             return result.data[correctAnimeID];
+        return correctAnimeID;
     } catch (error) {
         console.error(error);
     }
@@ -46,13 +50,19 @@ async function getCharacters(id){
 
 async function displayAnime(){
     document.getElementById("animeContainer").innerHTML = "";
+    document.getElementById("characterContainer").innerHTML = "";
 
-    let showOrMovie = document.getElementById("showOrMovie").value;
+    const animeContainer = document.getElementById("animeContainer");
+
+    const animeHeader = document.createElement("h2");
+    animeHeader.className = "header";
+    animeHeader.textContent = "Anime";
+    animeContainer.appendChild(animeHeader);
+
     let searchString = document.getElementById("animeInput").value;
+    let showOrMovie = document.getElementById("showOrMovie").value;
 
     let anime = await getAnimeByName(searchString, showOrMovie);
-
-    console.log(anime);
 
     if (anime != null){
         const animeCard = document.createElement("div");
@@ -63,7 +73,6 @@ async function displayAnime(){
         animeCard.appendChild(animeImage);
 
         const animeInformation = document.createElement("div");
-        animeInformation.className = "animeInformation";
 
         const animeTitle = document.createElement("h3");
         animeTitle.textContent = anime.titles[0].title;
@@ -86,22 +95,27 @@ async function displayAnime(){
         animeInformation.appendChild(characterButton);
 
         animeCard.appendChild(animeInformation);
-        const animeContainer = document.getElementById("animeContainer");
+        animeContainer.className = "container";
         animeContainer.appendChild(animeCard);
+    }
+    else {
+        const noResults = document.createElement("p");
+        noResults.textContent = "No results found.";
+        animeContainer.appendChild(noResults);
     }
 }
 
 async function displayCharacters(characterId) {
     document.getElementById("characterContainer").innerHTML = "";
 
+    const characterContainer = document.getElementById("characterContainer");
+
     const characterHeader = document.createElement("h2");
-    characterHeader.id = "mainCharactersHeader";
+    characterHeader.className = "header";
     characterHeader.textContent = "Main Characters";
-    document.getElementById("characterContainer").appendChild(characterHeader);
+    characterContainer.appendChild(characterHeader);
 
     let characters = await getCharacters(characterId);
-
-    console.log(characters);
 
     characters.forEach(character => {
         const characterCard = document.createElement("div");
@@ -117,7 +131,8 @@ async function displayCharacters(characterId) {
         characterName.textContent = character.character.name;
         characterInformation.appendChild(characterName);
 
-        characterCard.appendChild(characterInformation)
-        document.getElementById("characterContainer").appendChild(characterCard);
+        characterCard.appendChild(characterInformation);
+        characterContainer.className = "container";
+        characterContainer.appendChild(characterCard);
     });
 }
