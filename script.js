@@ -53,6 +53,7 @@ async function displayAnime(){
     document.getElementById("characterContainer").innerHTML = "";
 
     const animeContainer = document.getElementById("animeContainer");
+    animeContainer.className = "container";
 
     const animeHeader = document.createElement("h2");
     animeHeader.className = "header";
@@ -72,30 +73,26 @@ async function displayAnime(){
         animeImage.src = anime.images.jpg.large_image_url;
         animeCard.appendChild(animeImage);
 
-        const animeInformation = document.createElement("div");
-
         const animeTitle = document.createElement("h3");
         animeTitle.textContent = anime.titles[0].title;
-        animeInformation.appendChild(animeTitle);
+        animeCard.appendChild(animeTitle);
 
         const animeLength = document.createElement("p");
         if (showOrMovie == "TV") 
             animeLength.textContent = `Episodes: ${anime.episodes}`;
         else if (showOrMovie == "Movie") 
             animeLength.textContent = `Duration: ${anime.duration}`;
-        animeInformation.appendChild(animeLength);
+        animeCard.appendChild(animeLength);
 
         const animeSynopsis = document.createElement("p");
         animeSynopsis.textContent = anime.synopsis;
-        animeInformation.appendChild(animeSynopsis);
+        animeCard.appendChild(animeSynopsis);
 
         const characterButton = document.createElement("button");
         characterButton.textContent = "See Characters";
         characterButton.addEventListener("click", () => displayCharacters(anime.mal_id));
-        animeInformation.appendChild(characterButton);
+        animeCard.appendChild(characterButton);
 
-        animeCard.appendChild(animeInformation);
-        animeContainer.className = "container";
         animeContainer.appendChild(animeCard);
     }
     else {
@@ -109,6 +106,7 @@ async function displayCharacters(characterId) {
     document.getElementById("characterContainer").innerHTML = "";
 
     const characterContainer = document.getElementById("characterContainer");
+    characterContainer.className = "container";
 
     const characterHeader = document.createElement("h2");
     characterHeader.className = "header";
@@ -125,14 +123,10 @@ async function displayCharacters(characterId) {
         characterImage.src = character.character.images.jpg.image_url;
         characterCard.appendChild(characterImage);
 
-        const characterInformation = document.createElement("div");
-
         const characterName = document.createElement("h3");
         characterName.textContent = character.character.name;
-        characterInformation.appendChild(characterName);
+        characterCard.appendChild(characterName);
 
-        characterCard.appendChild(characterInformation);
-        characterContainer.className = "container";
         characterContainer.appendChild(characterCard);
     });
 }
