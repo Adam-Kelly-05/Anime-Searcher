@@ -1,46 +1,81 @@
-async function getAnimeByName(searchString, showOrMovie){
+// async function getAnimeByName(searchString, showOrMovie){
+//     let url = `https://api.jikan.moe/v4/anime?q=${searchString}`;
+//     try {
+//         const response = await fetch(url);
+//         const result = await response.json();
+
+//         let lowestPopularity = 99**9;
+//         let correctAnimeID = null;
+//         for (let i = 0; i < 5; i++){
+//             if (result.data[i] != null){
+//                 let currentAnime = result.data[i];
+//                 if (currentAnime.type == showOrMovie){
+//                     if (currentAnime.popularity <= lowestPopularity) {
+//                         lowestPopularity = currentAnime.popularity;
+//                         correctAnimeID = i;
+//                     }
+//                 }
+//             }
+//         }
+
+//         if (correctAnimeID != null)
+//             return result.data[correctAnimeID];
+//         return correctAnimeID;
+//     } catch (error) {
+//         console.error(error);
+//     }
+// }
+
+async function getAndSortAnimeByName(searchString, showOrMovie){
     let url = `https://api.jikan.moe/v4/anime?q=${searchString}`;
     try {
         const response = await fetch(url);
         const result = await response.json();
 
-        let lowestPopularity = 99**9;
-        let correctAnimeID = null;
-        for (let i = 0; i < 5; i++){
-            if (result.data[i] != null){
-                let currentAnime = result.data[i];
-                if (currentAnime.type == showOrMovie){
-                    if (currentAnime.popularity <= lowestPopularity) {
-                        lowestPopularity = currentAnime.popularity;
-                        correctAnimeID = i;
-                    }
-                }
-            }
-        }
+        if ((result.data).length == 0)
+            return null;
+        else {
+            let shows = result.data;
 
-        if (correctAnimeID != null)
-            return result.data[correctAnimeID];
-        return correctAnimeID;
+            shows = shows.slice(0, Math.min(shows.length, 5));
+            shows = shows.sort((a, b) => a.popularity - b.popularity);
+
+            return shows[0];
+        }
     } catch (error) {
         console.error(error);
     }
 }
 
-async function getCharacters(id){
+// async function getCharacters(id){
+//     let url = `https://api.jikan.moe/v4/anime/${id}/characters`;
+//     try {
+//         const response = await fetch(url);
+//         const result = await response.json();
+
+//         let characters = [];
+//         for (let i = 0; i < result.data.length; i++) {
+//             if (result.data[i].role == "Main") 
+//                 characters.push(result.data[i]);
+//             else
+//                 break;
+//         }
+
+//         return characters;
+//     } catch (error) {
+//         console.error(error);
+//     }
+// }
+
+async function getAndSortCharacters(id){
     let url = `https://api.jikan.moe/v4/anime/${id}/characters`;
     try {
         const response = await fetch(url);
         const result = await response.json();
 
-        let characters = [];
-        for (let i = 0; i < result.data.length; i++) {
-            if (result.data[i].role == "Main") {
-                characters.push(result.data[i]);
-            }
-            else {
-                break;
-            }
-        }
+        let characters = result.data;
+        characters = characters.filter(character => character.role == "Main");
+        characters = characters.sort((a, b) => b.favorites - a.favorites);
 
         return characters;
     } catch (error) {
@@ -63,7 +98,7 @@ async function displayAnime(){
     let searchString = document.getElementById("animeInput").value;
     let showOrMovie = document.getElementById("showOrMovie").value;
 
-    let anime = await getAnimeByName(searchString, showOrMovie);
+    let anime = await getAndSortAnimeByName(searchString, showOrMovie);
 
     if (anime != null){
         const animeCard = document.createElement("div");
@@ -113,7 +148,7 @@ async function displayCharacters(characterId) {
     characterHeader.textContent = "Main Characters";
     characterContainer.appendChild(characterHeader);
 
-    let characters = await getCharacters(characterId);
+    let characters = await getAndSortCharacters(characterId);
 
     characters.forEach(character => {
         const characterCard = document.createElement("div");
