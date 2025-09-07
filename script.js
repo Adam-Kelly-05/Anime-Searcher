@@ -37,6 +37,7 @@ async function getAndSortAnimeByName(searchString, showOrMovie){
         else {
             let shows = result.data;
 
+            shows = shows.filter(show => show.type == showOrMovie);
             shows = shows.slice(0, Math.min(shows.length, 5));
             shows = shows.sort((a, b) => a.popularity - b.popularity);
 
